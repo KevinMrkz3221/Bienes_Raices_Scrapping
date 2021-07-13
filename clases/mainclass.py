@@ -1,20 +1,20 @@
 import unittest
 from selenium import webdriver
 import pandas as pd
+from time import time
 
-
-class Clamudi(unittest.TestCase,):
+class Clamudi():
 
     def __init__(self):
         #driver options
-        """ 
+        
         self.options = webdriver.ChromeOptions()
         self.options.add_argument("-headless")
         self.options.add_argument("-no-sandbox")
         self.options.add_argument("-disable-dev-shm-usage")
-         """
+        
         #driver Init
-        self.driver = webdriver.Chrome(options= None, executable_path='./chromedriver')
+        self.driver = webdriver.Chrome(options= self.options, executable_path='./chromedriver')
         self.driver.get("https://www.lamudi.com.mx/chihuahua/ciudad-juarez-2/casa/for-sale/?currency=mxn&page=0")
         self.driver.maximize_window()
         self.driver.implicitly_wait(15)
@@ -67,30 +67,27 @@ class Clamudi(unittest.TestCase,):
 
     def auto_extraction(self, paths):
         data = []
-        paths_format = []
-        for i in range(len(paths)):
-            for j in range(len(paths[i])):
-                paths_format.append(paths[i][j])
-
-        paths = paths_format
-
+        
+        i = 0 #Se utiliza como contador para mostrar en que elemento va
          
-        for path in paths:
+        for link in self.links:
             try:
-                print(path)
-                self.setUp(path)
+                i += 1 
+                start = time()
+                self.setUp(link)
                 data.append(self.extraction())
-            except:
-                self.data = data
+                self.driver.implicitly_wait(2)
+                print(i,": ",link, "Time: ", time() - start)
+                
                 df = pd.DataFrame(data, columns=["Descripcion","Amenidades","Detalles", "Precio", "Direccion"])
                 df.to_csv('./BRdf.csv')
+
+            except:
                 pass
+        
         
         self.data = data
 
-        df = pd.DataFrame(data, columns=["Descripcion","Amenidades","Detalles", "Precio", "Direccion"])
         
-        df.to_csv('./BRdf.csv')
-
     def tearDown(self):
         self.driver.quit()

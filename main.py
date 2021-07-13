@@ -1,5 +1,5 @@
 from urllib3.packages.six import with_metaclass
-from mainclass import *
+from clases.mainclass import *
 
 def txt_to_list(document):
     paths = []
@@ -9,20 +9,23 @@ def txt_to_list(document):
 
     return paths    
 
+def get_data_from_Clamudi():
+    start = time()
+    lamudi = Clamudi()                                #Crea nuestro objeto de extraccion
+
+    lamudi.list_of_all_links()                        #genera una lista de elementos que contienen la direccion de la pagina web donde se extraera todo
+    lamudi.list_to_txt()                              #Combierte la lista anterior a un archivo de texto en caso de que se requieran
+
+    paths = txt_to_list('./selenium_webElement.txt')  #lee nuestros paths y los combierte en una lista
+
+    lamudi.auto_extraction(paths)                     #Inicia la extraccion automatica de nuestro sitio web
+
+    lamudi.tearDown()                                 #Cierra el driver del navegador
+
+    print(time() -  start)                            #Nos muestra el tiempo de ejecucion de toda esta funcion
 
 if __name__ == '__main__':
 
-    test = Clamudi()
+    get_data_from_Clamudi()
     
-
-    # Obtiene todo los objetos Solo utilizar cuando no tenemos elementos en nuestro archivo de texto ya que esto hace que tarde mas la ejecucion
-    #test.list_of_links_by_page()
-    #test.list_of_all_links()    
-    #test.list_to_txt()
-
-    #En caso de que se corrieran las lineas anteriores habla a estos metodos directamente
-    paths = txt_to_list('./selenium_webElement.txt')
-    test.auto_extraction(paths)
-
-    test.tearDown()
 
