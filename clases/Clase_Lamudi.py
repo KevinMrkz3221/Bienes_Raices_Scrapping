@@ -28,19 +28,23 @@ class Clamudi():
     def switch_window(self, item):
         self.driver.switch_to.window(item)
     
+
+    #obtiene unicamente los enlaces de la pagina en la que se encuentra
     def list_of_links_by_page(self):
         self.links = self.driver.find_elements_by_link_text("Ver mas Info")
         href = [link.get_attribute('href') for link in self.links]
         self.links = href
 
+    #salga a la siguiente pagina si al final tiene un elemento Next
     def next_page(self):
         self.driver.find_element_by_class_name("next").click()
 
+    #Obtiene todos los links de las paginas de interes y las guarda en una lista dentro de la clase
     def list_of_all_links(self):
         start = time()
         links = []
         new_list = []
-        for _ in range(20):
+        for _ in range(30):
             self.list_of_links_by_page()
             links.append(self.links)
             self.next_page()
@@ -52,6 +56,7 @@ class Clamudi():
         self.links = new_list
         print("List of all links Execution time: ",time() - start)
     
+    #Crea un archivo de texto que contiene todos los enlaces que nos interesan para una furuta extraccion 
     def list_to_txt(self):
         start = time()
         os.chdir("/home/kevin/Documents/IA Center/scrap_bienes_raices/Selenium_webElements")
@@ -62,7 +67,7 @@ class Clamudi():
             
         print("List to text Execution Time:",time() - start)
         
-    
+    #busca las clases o los puntos de intere de nuestra pagina 
     def extraction(self):
         details = self.driver.find_elements_by_class_name("columns-2")
         details = [detail.text for detail in details]
@@ -74,6 +79,8 @@ class Clamudi():
 
         return description.text, amenities, details, price.text, direction.text
 
+
+    #automatiza la extraccion de datos
     def auto_extraction(self):
         data = []
         

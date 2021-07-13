@@ -1,5 +1,5 @@
 from urllib3.packages.six import with_metaclass
-from clases.mainclass import *
+from clases.Clase_Lamudi import *
 
 def txt_to_list(document):
     paths = []
