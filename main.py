@@ -15,10 +15,8 @@ def get_data_from_Clamudi():
 
     lamudi.list_of_all_links()                        #genera una lista de elementos que contienen la direccion de la pagina web donde se extraera todo
     lamudi.list_to_txt()                              #Combierte la lista anterior a un archivo de texto en caso de que se requieran
-
-    paths = txt_to_list('./selenium_webElement.txt')  #lee nuestros paths y los combierte en una lista
-
-    lamudi.auto_extraction(paths)                     #Inicia la extraccion automatica de nuestro sitio web
+    
+    lamudi.auto_extraction()                          #Inicia la extraccion automatica de nuestro sitio web
 
     lamudi.tearDown()                                 #Cierra el driver del navegador
 
@@ -27,5 +25,8 @@ def get_data_from_Clamudi():
 if __name__ == '__main__':
 
     get_data_from_Clamudi()
+    
+
+
     
 

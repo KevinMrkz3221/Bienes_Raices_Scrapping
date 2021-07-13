@@ -1,7 +1,10 @@
-import unittest
+
 from selenium import webdriver
 import pandas as pd
 from time import time
+from datetime import date
+import os
+
 
 class Clamudi():
 
@@ -34,6 +37,7 @@ class Clamudi():
         self.driver.find_element_by_class_name("next").click()
 
     def list_of_all_links(self):
+        start = time()
         links = []
         new_list = []
         for _ in range(20):
@@ -46,12 +50,17 @@ class Clamudi():
                 new_list.append(links[i][j])
         
         self.links = new_list
-
+        print("List of all links Execution time: ",time() - start)
     
     def list_to_txt(self):
-        with open("selenium_webElement.txt", 'w') as f: 
+        start = time()
+        os.chdir("/home/kevin/Documents/IA Center/scrap_bienes_raices/Selenium_webElements")
+        with open("./selenium_webElement_{}.txt".format(date.today()), "w") as f: 
             for element in self.links:
                 f.write(str(element)+'\n')
+
+            
+        print("List to text Execution Time:",time() - start)
         
     
     def extraction(self):
@@ -65,7 +74,7 @@ class Clamudi():
 
         return description.text, amenities, details, price.text, direction.text
 
-    def auto_extraction(self, paths):
+    def auto_extraction(self):
         data = []
         
         i = 0 #Se utiliza como contador para mostrar en que elemento va
@@ -80,13 +89,13 @@ class Clamudi():
                 print(i,": ",link, "Time: ", time() - start)
                 
                 df = pd.DataFrame(data, columns=["Descripcion","Amenidades","Detalles", "Precio", "Direccion"])
-                df.to_csv('./BRdf.csv')
+                df.to_csv("../data/Clamundi_{}.csv".format(date.today()))
 
             except:
                 pass
         
         
-        self.data = data
+        self.data = pd.DataFrame(data, columns=["Descripcion","Amenidades","Detalles", "Precio", "Direccion"])
 
         
     def tearDown(self):
