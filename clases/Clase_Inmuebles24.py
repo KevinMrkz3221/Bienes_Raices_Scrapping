@@ -1,7 +1,6 @@
-from clases.Clase_Lamudi import *
+from Clase_Lamudi import *
 
-
-class CViva_Anuncios(Clamudi):
+class CInmuebles24(Clamudi):
     def __init__(self):
         # driver options
         self.options = webdriver.ChromeOptions()
@@ -13,9 +12,11 @@ class CViva_Anuncios(Clamudi):
         self.driver = webdriver.Chrome(
             options=self.options, executable_path='./chromedriver')
         self.driver.get(
-            "https://www.vivanuncios.com.mx/s-venta-inmuebles/juarez/v1c1097l10185p1")
+            "https://www.inmuebles24.com/casas-en-venta-en-juarez.html")
         self.driver.maximize_window()
         self.driver.implicitly_wait(15)
+
+
 
     def list_of_links_by_page(self):
         self.links = self.driver.find_elements_by_class_name("href-link")
