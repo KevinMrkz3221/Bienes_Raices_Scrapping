@@ -29,10 +29,8 @@ class Clamudi():
         self.options.add_argument("-disable-dev-shm-usage")
 
         # driver Init
-        self.driver = webdriver.Chrome(
-            options=self.options, executable_path='./chromedriver')
-        self.driver.get(
-            "https://www.lamudi.com.mx/chihuahua/ciudad-juarez-2/casa/for-sale/?currency=mxn&page=1")
+        self.driver = webdriver.Chrome(options=self.options, executable_path='./chromedriver')
+        self.driver.get("https://www.lamudi.com.mx/chihuahua/ciudad-juarez-2/casa/for-sale/?currency=mxn&page=1")
         self.driver.maximize_window()
         self.driver.implicitly_wait(15)
 
@@ -93,10 +91,8 @@ class Clamudi():
         details = self.driver.find_elements_by_class_name("columns-2")
         details = [detail.text for detail in details]
         price = self.driver.find_element_by_class_name("Overview-main")
-        direction = self.driver.find_element_by_class_name(
-            "Header-title-address-text")
-        description = self.driver.find_element_by_class_name(
-            "ViewMore-text-description")
+        direction = self.driver.find_element_by_class_name("Header-title-address-text")
+        description = self.driver.find_element_by_class_name("ViewMore-text-description")
         amenities = self.driver.find_elements_by_class_name("amenities-cols")
         amenities = [ameniti.text for ameniti in amenities]
 
@@ -118,15 +114,13 @@ class Clamudi():
                 self.driver.implicitly_wait(2)
                 print(i, ": ", link, "\n\tTime: ", time() - start)
 
-                df = pd.DataFrame(
-                    data, columns=["Descripcion", "Amenidades", "Detalles", "Precio", "Direccion"])
+                df = pd.DataFrame(data, columns=["Descripcion", "Amenidades", "Detalles", "Precio", "Direccion"])
                 df.to_csv("../data/{}_{}.csv".format(name, date.today()))
 
             except:
                 pass
 
-        self.data = pd.DataFrame(
-            data, columns=["Descripcion", "Amenidades", "Detalles", "Precio", "Direccion"])
+        self.data = pd.DataFrame(data, columns=["Descripcion", "Amenidades", "Detalles", "Precio", "Direccion"])
 
     def tearDown(self):
         self.driver.quit()
