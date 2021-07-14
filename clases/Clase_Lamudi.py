@@ -3,8 +3,21 @@ import pandas as pd
 from time import time
 from datetime import date
 from os import chdir
-from iteration_utilities import duplicates
-from iteration_utilities import unique_everseen
+
+
+"""
+    Atributos de la clase:
+
+    Se crean inicialmente junto con el objeto:
+        options
+        driver
+
+    Se crean al utilizar metodos:
+        Links:  Se necesita utilizar la funcion list_of_links_by_page o list_of_all_links
+        Data:   Se necesita utilizar la funcion auto_extraction
+
+"""
+
 
 class Clamudi():
 
@@ -21,7 +34,7 @@ class Clamudi():
         self.driver.maximize_window()
         self.driver.implicitly_wait(15)
     
-    def setUp(self, path):
+    def setUp(self, path): #cambia la pagina con la que se esta trabajando
         self.driver.get(path)
 
     def switch_window(self, item):
@@ -39,21 +52,21 @@ class Clamudi():
         self.driver.find_element_by_class_name("next").click()
 
     #Obtiene todos los links de las paginas de interes y las guarda en una lista dentro de la clase
-    def list_of_all_links(self): 
+    def list_of_all_links(self,  No_Pages): 
         start = time()
         links = []
         new_list = []
 
-        for _ in range(20):
+        for _ in range(No_Pages):
             self.list_of_links_by_page()
             links.append(self.links)
             self.next_page()
             
-        for i in range(len(links)):
+        for i in range(len(links)):   #Lista bidimensional a lista de 1 dimension 
             for j in range(len(links[i])):
                 new_list.append(links[i][j])
               
-        result = []             #se eliminan elementos repetidos
+        result = []                  #se eliminan elementos repetidos
         for item in new_list:
             if item not in result:
                 result.append(item)
@@ -64,10 +77,10 @@ class Clamudi():
         print("List of all links Execution time: ",time() - start)
     
     #Crea un archivo de texto que contiene todos los enlaces que nos interesan para una furuta extraccion 
-    def list_to_txt(self):#agregar parametro de nombre de archivo
+    def list_to_txt(self, name):#agregar parametro de nombre de archivo
         start = time()
         chdir("/home/kevin/Documents/IA Center/scrap_bienes_raices/Selenium_webElements")
-        with open("./selenium_webElement_{}.txt".format(date.today()), "w") as f: 
+        with open("./{}_webElement_{}.txt".format(name, date.today()), "w") as f: 
             for element in self.links:
                 f.write(str(element)+'\n')
 
@@ -88,7 +101,7 @@ class Clamudi():
 
 
     #automatiza la extraccion de datos
-    def auto_extraction(self):
+    def auto_extraction(self, name):
         data = []
         
         i = 0 #Se utiliza como contador para mostrar en que elemento va
@@ -103,7 +116,7 @@ class Clamudi():
                 print(i,": ",link, "\n\tTime: ", time() - start)
                 
                 df = pd.DataFrame(data, columns=["Descripcion","Amenidades","Detalles", "Precio", "Direccion"])
-                df.to_csv("../data/Clamundi_{}.csv".format(date.today()))
+                df.to_csv("../data/{}_{}.csv".format(name, date.today()))
 
             except:
                 pass
