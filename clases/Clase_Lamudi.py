@@ -2,14 +2,14 @@ from selenium import webdriver
 import pandas as pd
 from time import time
 from datetime import date
-import os
-
+from os import chdir
+from iteration_utilities import duplicates
+from iteration_utilities import unique_everseen
 
 class Clamudi():
 
     def __init__(self):
         #driver options
-        
         self.options = webdriver.ChromeOptions()
         self.options.add_argument("-headless")
         self.options.add_argument("-no-sandbox")
@@ -17,7 +17,7 @@ class Clamudi():
         
         #driver Init
         self.driver = webdriver.Chrome(options= self.options, executable_path='./chromedriver')
-        self.driver.get("https://www.lamudi.com.mx/chihuahua/ciudad-juarez-2/casa/for-sale/?currency=mxn&page=0")
+        self.driver.get("https://www.lamudi.com.mx/chihuahua/ciudad-juarez-2/casa/for-sale/?currency=mxn&page=1")
         self.driver.maximize_window()
         self.driver.implicitly_wait(15)
     
@@ -39,11 +39,12 @@ class Clamudi():
         self.driver.find_element_by_class_name("next").click()
 
     #Obtiene todos los links de las paginas de interes y las guarda en una lista dentro de la clase
-    def list_of_all_links(self):
+    def list_of_all_links(self): 
         start = time()
         links = []
         new_list = []
-        for _ in range(30):
+
+        for _ in range(20):
             self.list_of_links_by_page()
             links.append(self.links)
             self.next_page()
@@ -51,14 +52,21 @@ class Clamudi():
         for i in range(len(links)):
             for j in range(len(links[i])):
                 new_list.append(links[i][j])
-        
-        self.links = new_list
+              
+        result = []             #se eliminan elementos repetidos
+        for item in new_list:
+            if item not in result:
+                result.append(item)
+
+        self.links = result
+
+
         print("List of all links Execution time: ",time() - start)
     
     #Crea un archivo de texto que contiene todos los enlaces que nos interesan para una furuta extraccion 
-    def list_to_txt(self):
+    def list_to_txt(self):#agregar parametro de nombre de archivo
         start = time()
-        os.chdir("/home/kevin/Documents/IA Center/scrap_bienes_raices/Selenium_webElements")
+        chdir("/home/kevin/Documents/IA Center/scrap_bienes_raices/Selenium_webElements")
         with open("./selenium_webElement_{}.txt".format(date.today()), "w") as f: 
             for element in self.links:
                 f.write(str(element)+'\n')
@@ -92,7 +100,7 @@ class Clamudi():
                 self.setUp(link)
                 data.append(self.extraction())
                 self.driver.implicitly_wait(2)
-                print(i,": ",link, "Time: ", time() - start)
+                print(i,": ",link, "\n\tTime: ", time() - start)
                 
                 df = pd.DataFrame(data, columns=["Descripcion","Amenidades","Detalles", "Precio", "Direccion"])
                 df.to_csv("../data/Clamundi_{}.csv".format(date.today()))

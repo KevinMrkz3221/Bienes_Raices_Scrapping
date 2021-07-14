@@ -1,3 +1,4 @@
+
 from clases.Clase_Lamudi import *
 
 def txt_to_list(document):
@@ -10,6 +11,7 @@ def txt_to_list(document):
 
 def get_data_from_Clamudi():
     start = time()
+    print("=====Obteniendo informacion de Lamudi=====")
     lamudi = Clamudi()                                #Crea nuestro objeto de extraccion
 
     lamudi.list_of_all_links()                        #genera una lista de elementos que contienen la direccion de la pagina web donde se extraera todo
@@ -19,7 +21,7 @@ def get_data_from_Clamudi():
 
     lamudi.tearDown()                                 #Cierra el driver del navegador
 
-    print(time() -  start)                            #Nos muestra el tiempo de ejecucion de toda esta funcion
+    print("Fin\n Tiempo de ejecucion: ",time() -  start/60)                            #Nos muestra el tiempo de ejecucion de toda esta funcion
 
 if __name__ == '__main__':
 
