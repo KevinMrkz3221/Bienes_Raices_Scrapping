@@ -30,7 +30,7 @@ class CInmuebles(Clamudi):
             self.links = href 
             self.number_page =+ self.number_page + 1   
         except:
-            pass
+            print("No data found")
 
     
 

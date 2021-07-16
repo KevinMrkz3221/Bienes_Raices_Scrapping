@@ -3,7 +3,7 @@ import pandas as pd
 from time import time
 from datetime import date
 from os import chdir
-
+from tqdm.auto import tqdm
 
 """
     Atributos de la clase:
@@ -54,11 +54,12 @@ class Clamudi():
 
     # Obtiene todos los links de las paginas de interes y las guarda en una lista dentro de la clase
     def list_of_all_links(self,  No_Pages):
-        start = time()
+        
         links = []
         new_list = []
 
-        for _ in range(No_Pages):
+        print("Getting links: ")
+        for _ in tqdm(range(No_Pages)):
             self.list_of_links_by_page()
             links.append(self.links)
             self.next_page()
@@ -74,17 +75,16 @@ class Clamudi():
 
         self.links = result
 
-        print("List of all links Execution time: ", time() - start)
 
     # Crea un archivo de texto que contiene todos los enlaces que nos interesan para una furuta extraccion
     def list_to_txt(self, name):  # agregar parametro de nombre de archivo
-        start = time()
+
         chdir("/home/kevin/Documents/IA Center/scrap_bienes_raices/Selenium_webElements")
         with open("./{}_webElement_{}.txt".format(name, date.today()), "w") as f:
             for element in self.links:
                 f.write(str(element)+'\n')
 
-        print("List to text Execution Time:", time() - start)
+
 
     # busca las clases o los puntos de intere de nuestra pagina
     def extraction(self):
@@ -102,21 +102,21 @@ class Clamudi():
 
     def auto_extraction(self, name):
         data = []
-
+        self.driver.implicitly_wait(2)
         i = 0  # Se utiliza como contador para mostrar en que elemento va
-
-        for link in self.links:
+        print("Getting data: ")
+        for link in tqdm(self.links):
             try:
                 i += 1
                 start = time()
                 self.setUp(link)
                 data.append(self.extraction())
-                print(i, ": ", link, "\n\tTime: ", time() - start)
+                #print(i, ": ", link, "\n\tTime: ", time() - start)
                 df = pd.DataFrame(data, columns=["Descripcion", "Amenidades", "Detalles", "Precio", "Direccion"])
                 df.to_csv("../data/{}_{}.csv".format(name, date.today()))
 
             except:
-                print("pass")
+                print("No data Found")
 
         self.data = pd.DataFrame(data, columns=["Descripcion", "Amenidades", "Detalles", "Precio", "Direccion"])
 
