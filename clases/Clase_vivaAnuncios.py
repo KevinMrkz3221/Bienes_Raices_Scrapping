@@ -10,10 +10,8 @@ class CViva_Anuncios(Clamudi):
         self.options.add_argument("-disable-dev-shm-usage")
 
         # driver Init
-        self.driver = webdriver.Chrome(
-            options=self.options, executable_path='./chromedriver')
-        self.driver.get(
-            "https://www.vivanuncios.com.mx/s-venta-inmuebles/juarez/v1c1097l10185p1")
+        self.driver = webdriver.Chrome(options=self.options, executable_path='./chromedriver')
+        self.driver.get("https://www.vivanuncios.com.mx/s-venta-inmuebles/juarez/v1c1097l10185p1")
         self.driver.maximize_window()
         self.driver.implicitly_wait(15)
 
@@ -34,8 +32,7 @@ class CViva_Anuncios(Clamudi):
         details = [detail.text for detail in details]
         price = self.driver.find_element_by_class_name("ad-price")
         direction = self.driver.find_element_by_class_name("location-name")
-        description = self.driver.find_element_by_class_name(
-            "description-content")
+        description = self.driver.find_element_by_class_name("description-content")
         amenities = self.driver.find_elements_by_class_name("amenities-chips")
         amenities = [ameniti.text for ameniti in amenities]
 

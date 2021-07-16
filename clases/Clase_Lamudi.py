@@ -35,7 +35,7 @@ class Clamudi():
         self.driver.implicitly_wait(15)
 
     # cambia la pagina con la que se esta trabajando
-    def setUp(self, path):  
+    def setUp(self, path):
         self.driver.get(path)
 
     def switch_window(self, item):
@@ -111,14 +111,12 @@ class Clamudi():
                 start = time()
                 self.setUp(link)
                 data.append(self.extraction())
-                self.driver.implicitly_wait(2)
                 print(i, ": ", link, "\n\tTime: ", time() - start)
-
                 df = pd.DataFrame(data, columns=["Descripcion", "Amenidades", "Detalles", "Precio", "Direccion"])
                 df.to_csv("../data/{}_{}.csv".format(name, date.today()))
 
             except:
-                pass
+                print("pass")
 
         self.data = pd.DataFrame(data, columns=["Descripcion", "Amenidades", "Detalles", "Precio", "Direccion"])
 
