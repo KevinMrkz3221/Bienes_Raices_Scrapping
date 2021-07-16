@@ -3,24 +3,9 @@ from clases.Clase_Lamudi import *
 
 
 class CInmuebles(Clamudi):
-
-    def __init__(self):
-        # driver options
-        self.options = webdriver.ChromeOptions()
-        self.options.add_argument("-headless")
-        self.options.add_argument("-no-sandbox")
-        self.options.add_argument("-disable-dev-shm-usage")
-
-        # driver Init
-        self.driver = webdriver.Chrome(options=None, executable_path='./chromedriver')
-        self.driver.get("https://www.inmuebles24.com/casas-en-venta-en-juarez.html#")
-        self.driver.maximize_window()
-        self.driver.implicitly_wait(15)
-
-        #
-        self.number_page = 0 
-
-
+    def __init__(self, url):
+        super().__init__(url)
+        self.number_page = 0
 
     def list_of_links_by_page(self):
         try:
@@ -36,7 +21,7 @@ class CInmuebles(Clamudi):
 
     def next_page(self):
         path = "https://www.inmuebles24.com/casas-en-venta-en-juarez-pagina-{}".format(self.number_page)+".html"
-        self.setUp(path)
+        self.setOtherPage(path)
 
     def extraction(self):
         details = self.driver.find_elements_by_class_name("icon-feature")
