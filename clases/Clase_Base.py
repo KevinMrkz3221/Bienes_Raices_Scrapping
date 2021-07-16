@@ -1,7 +1,7 @@
 from selenium import webdriver
 import pandas as pd
 from datetime import date
-from os import chdir
+from os import chdir, getcwd
 from tqdm.auto import tqdm
 
 
@@ -14,15 +14,16 @@ class Cbase():
             self.options.add_argument("-disable-dev-shm-usage")
 
             self.url = url
-
+            self.main_dir = getcwd()
+            self.chromedriver = self.main_dir + "/chromedriver"
 
     # driver Init
     def setUp(self, bool):
         if bool:        
-            self.driver = webdriver.Chrome(options=None, executable_path='/home/kevin/Documents/IA Center/scrap_bienes_raices/chromedriver')
+            self.driver = webdriver.Chrome(options=None, executable_path=self.chromedriver)
             self.driver.get(self.url)
         else:
-            self.driver = webdriver.Chrome(options=self.options, executable_path='/home/kevin/Documents/IA Center/scrap_bienes_raices/chromedriver')
+            self.driver = webdriver.Chrome(options=self.options, executable_path=self.chromedriver)
             self.driver.get(self.url)
         # Se maximiza para ver si no se encuentran elementos ocultos
         # Minimo va a esperar 15 segundos a que la pagina reaccione
@@ -58,8 +59,7 @@ class Cbase():
                 links.append(self.links)
                 self.next_page()
             except:
-                print("No more pages")
-                break
+                pass
 
         for i in range(len(links)):  # Lista bidimensional a lista de 1 dimension
             for j in range(len(links[i])):
@@ -75,20 +75,26 @@ class Cbase():
 
     # Crea un archivo de texto que contiene todos los enlaces que nos interesan para una furuta extraccion
     def list_to_txt(self, name, path):  # agregar parametro de nombre de archivo
+        
+        save_dir =getcwd() + "/Selenium_webElements/{}".format(path)
+        
+        chdir(save_dir)
 
-        chdir("/home/kevin/Documents/IA Center/scrap_bienes_raices/Selenium_webElements/{}".format(path))
-        with open("./{}_webElement_{}.txt".format(name, date.today()), "w") as f:
+        with open("{}_webElement_{}.txt".format(name, date.today()), "w") as f:
             for element in self.links:
                 f.write(str(element)+'\n')
+        
+        chdir(self.main_dir)
 
     
     # automatiza la extraccion de datos
 
     def auto_extraction(self, name, path):
         data = []
+        save_dir = getcwd() + "/data/{}".format(path)
         self.driver.implicitly_wait(2)
         print("Getting data: ")
-        chdir("/home/kevin/Documents/IA Center/scrap_bienes_raices/data/{}".format(path))
+        chdir(save_dir)
         for link in tqdm(self.links):
             try:
                 self.setOtherPage(link)
@@ -99,9 +105,9 @@ class Cbase():
                 df.to_csv("{}_{}.csv".format(name, date.today()))
                 
             except:
-                print("No data Found")
+                pass
 
         self.data = pd.DataFrame(data, columns=["Descripcion", "Amenidades", "Detalles", "Precio", "Direccion"])
-
+        chdir(self.main_dir)
     def tearDown(self):
         self.driver.quit()

@@ -31,7 +31,7 @@ def get_data_from_Clamudi(FileName, no_pages):
     lamudi.tearDown()                       # Cierra el driver del navegador
 
     # Nos muestra el tiempo de ejecucion de toda esta funcion
-    print("Fin\n Tiempo de ejecucion: ", (time() - start)/60)
+    print("Completado!\nTiempo de ejecucion: ", (time() - start)/60)
 
 
 def get_data_from_VivaAnuncios(FileName, no_pages):

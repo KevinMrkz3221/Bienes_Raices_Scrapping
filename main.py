@@ -11,6 +11,5 @@ from functions import *
         get_data_from_Inmuebles24()
 """
 
-
 if __name__ == '__main__':
-
+    get_data_from_VivaAnuncios("test", 1)
