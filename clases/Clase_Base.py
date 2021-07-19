@@ -3,16 +3,18 @@ import pandas as pd
 from datetime import date
 from os import chdir, getcwd
 from tqdm.auto import tqdm
-
+from selenium.webdriver.chrome.options import Options
 
 class Cbase():
     def __init__(self, url):
             # driver options
+            
             self.options = webdriver.ChromeOptions()
             self.options.add_argument("-headless")
             self.options.add_argument("-no-sandbox")
             self.options.add_argument("-disable-dev-shm-usage")
 
+            # inits de ayuda
             self.url = url
             self.main_dir = getcwd()
             self.chromedriver = self.main_dir + "/chromedriver"
@@ -25,10 +27,11 @@ class Cbase():
         else:
             self.driver = webdriver.Chrome(options=self.options, executable_path=self.chromedriver)
             self.driver.get(self.url)
-        # Se maximiza para ver si no se encuentran elementos ocultos
-        # Minimo va a esperar 15 segundos a que la pagina reaccione
-        self.driver.maximize_window()
-        self.driver.implicitly_wait(15)
+        
+        self.driver.maximize_window()           # Se maximiza para ver si no se encuentran elementos ocultos
+        self.driver.implicitly_wait(15)         # Minimo va a esperar 15 segundos a que la pagina reaccione
+
+
 
     # cambia la pagina con la que se esta trabajando
     def setOtherPage(self, path):

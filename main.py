@@ -1,7 +1,10 @@
+
 from functions import *
+
 """
     Para obtener informacion de Lamudi unicamente en main llamar la funcion
     get_data_from_lamudi("Aqui va nombre de archivo", no_pages)
+    La variable no_pages cambia dependiendo la funcion ya que se le asigno el valaor por defecto 
 
     Se hace lo mismo para los otros sitios.
 
@@ -12,4 +15,6 @@ from functions import *
 """
 
 if __name__ == '__main__':
-    get_data_from_VivaAnuncios("test", 1)
+    get_data_from_Clamudi("Lamudi")
+    get_data_from_VivaAnuncios("VivaAnuncios")
+    get_data_from_Inmuebles24("Inmuebles24")

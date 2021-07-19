@@ -20,7 +20,6 @@ class Clamudi(Cbase):
         super().__init__(url)
 
     # obtiene unicamente los enlaces de la pagina en la que se encuentra
-
     def list_of_links_by_page(self):
         self.links = self.driver.find_elements_by_link_text("Ver mas Info")
         href = [link.get_attribute('href') for link in self.links]

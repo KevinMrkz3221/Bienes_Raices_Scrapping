@@ -1,7 +1,9 @@
+import tkinter
 from clases.Clase_Lamudi import Clamudi
 from clases.Clase_vivaAnuncios import CViva_Anuncios
 from clases.Clase_Inmuebles import CInmuebles
 from time import time
+from tkinter import *
 
 def txt_to_list(document):
     paths = []
@@ -12,7 +14,7 @@ def txt_to_list(document):
     return paths
 
 
-def get_data_from_Clamudi(FileName, no_pages):
+def get_data_from_Clamudi(FileName, no_pages=20):
     start = time()
     path = "Lamudi"
     url = "https://www.lamudi.com.mx/chihuahua/ciudad-juarez-2/casa/for-sale/?currency=mxn&page=1"
@@ -34,7 +36,7 @@ def get_data_from_Clamudi(FileName, no_pages):
     print("Completado!\nTiempo de ejecucion: ", (time() - start)/60)
 
 
-def get_data_from_VivaAnuncios(FileName, no_pages):
+def get_data_from_VivaAnuncios(FileName, no_pages=49):
     start = time()
     path = "VivaAnuncios"
     url = "https://www.vivanuncios.com.mx/s-venta-inmuebles/juarez/v1c1097l10185p1"
@@ -57,7 +59,7 @@ def get_data_from_VivaAnuncios(FileName, no_pages):
 
 
 
-def get_data_from_Inmuebles24(FileName, no_pages):
+def get_data_from_Inmuebles24(FileName, no_pages=10):
     start = time()
     path = "Inmuebles24"
     url = "https://www.inmuebles24.com/casas-en-venta-en-juarez.html#"
